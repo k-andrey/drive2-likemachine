@@ -1,0 +1,27 @@
+#drive_ext {
+    padding: 7px;
+    background-color: rgba(0,0,0,.9);
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    position: fixed;
+    top: calc(50% - 15px);
+    right: 0;
+    width: auto;
+    transition: .3s;
+    cursor: pointer;
+}
+
+#drive_ext:hover {
+    opacity: 0.8;
+}
+
+#drive_ext.enabled {
+    background-color: green;
+}
+
+#drive_ext .like_btn {
+    color: #ccc;
+    width: 30px;
+    height: 30px;
+    vertical-align: middle;
+}
