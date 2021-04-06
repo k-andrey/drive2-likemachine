@@ -48,6 +48,7 @@ const likeFn = () => {
         }
     }
     $(likes)[0].scrollIntoView({ behavior: "smooth", block: "center" });
-    setTimeout(() => $(likes)[0].click(), 500);
+    wait(500).then(() => $(likes)[0].click());
 }
 
+const wait = (t) => new Promise(resolve => { window.setTimeout(resolve, t) });

@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "Drive2 Extension",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Лайкомёт для бортжурнала Drive2",
   "icons": {
     "16": "icon16.png",
