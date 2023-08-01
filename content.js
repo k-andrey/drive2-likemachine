@@ -1,54 +1,56 @@
 const likeImg = chrome.runtime.getURL("like.svg");
 const banner = `<div id="drive_ext"><img class="like_btn" alt="Like Machine" src="${likeImg}" /></div>`;
 const ext = '#drive_ext';
-let interval;
 
 $('body').append(banner);
 
 chrome.storage.sync.get(['like_machine_enabled'], ({ like_machine_enabled }) => {
     if (like_machine_enabled) {
         $(ext).addClass('enabled');
-        interval = setInterval(likeFn, 1000);
+        likeFn();
     } else {
         $(ext).removeClass('enabled');
-        clearInterval(interval);
     }
 });
 
 $(ext).click(() => {
     chrome.storage.sync.get(['like_machine_enabled'], ({ like_machine_enabled }) => {
         if (like_machine_enabled) {
-            chrome.storage.sync.set({like_machine_enabled: false}, () => {
+            chrome.storage.sync.set({ like_machine_enabled: false }, () => {
                 $(ext).removeClass('enabled');
-                clearInterval(interval);
             });
         } else {
-            chrome.storage.sync.set({like_machine_enabled: true}, () => {
+            chrome.storage.sync.set({ like_machine_enabled: true }, () => {
                 $(ext).addClass('enabled');
-                interval = setInterval(likeFn, 1000);
+                likeFn();
             });
         }
     });
 });
 
-const likeFn = () => {
-    const nextPage = '.c-pager__page--active ~ .c-pager__page';
-    const likes = '.c-like:not(.is-liked) button.c-like__button';
-    if ($(likes).length === 0) {
-        if ($(nextPage).length) {
-            $(nextPage)[0].scrollIntoView({ behavior: "smooth", block: "center" });
-            $(nextPage)[0].click();
-            return;
-        } else {
-            chrome.storage.sync.set({like_machine_enabled: false}, () => {
-                $(ext).removeClass('enabled');
-                clearInterval(interval);
-            });
-            return;
-        }
+const likeFn = async () => {
+    const likes = '.c-like:not(.is-disabled) > button';
+    const nextPage = '.c-pager .c-pager__link[rel="next"]';
+
+    const likeButtons = [...$(likes)];
+
+    while (likeButtons.length) {
+        const likeBtn = likeButtons.shift();
+        likeBtn.scrollIntoView({ behavior: "auto", block: "center" });
+        await wait(500);
+        likeBtn.click();
+        await wait(1000);
     }
-    $(likes)[0].scrollIntoView({ behavior: "smooth", block: "center" });
-    wait(500).then(() => $(likes)[0].click());
+
+    if ($(nextPage).length) {
+        $(nextPage)[0].scrollIntoView({ behavior: "auto", block: "center" });
+        await wait(500);
+        $(nextPage)[0].click();
+    } else {
+        chrome.storage.sync.set({ like_machine_enabled: false }, () => {
+            $(ext).removeClass('enabled');
+        });
+    }
 }
 
 const wait = (t) => new Promise(resolve => { window.setTimeout(resolve, t) });

@@ -1,21 +1,21 @@
 {
-  "manifest_version": 2,
+  "manifest_version": 3,
   "name": "Drive2 Extension",
-  "version": "0.0.2",
+  "version": "0.0.4",
   "description": "Лайкомёт для бортжурнала Drive2",
   "icons": {
     "16": "icon16.png",
     "48": "icon48.png",
     "128": "icon.png"
   },
-  "author": "andryxa0635",
-  "browser_action": {
+  "author": "andryxa",
+  "action": {
     "default_icon": "icon.png"
   },
   "content_scripts": [
     {
       "matches": [
-        "https://www.drive2.ru/*/logbook/*"
+        "https://www.drive2.ru/*/logbook*"
       ],
       "css": [
         "styles.css"
@@ -26,6 +26,9 @@
       ]
     }
   ],
-  "web_accessible_resources": ["like.svg"],
+  "web_accessible_resources": [{
+    "resources": ["like.svg"],
+    "matches": ["https://www.drive2.ru/*"]
+  }],
   "permissions": ["storage"]
 }
